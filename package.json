@@ -23,6 +23,8 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
     "@babel/preset-stage-2": "^7.0.0",
     "axios": "^0.19.0",
     "babel-loader": "^8.0.6",
@@ -45,5 +47,8 @@
     "url-loader": "^2.0.0",
     "webpack": "^4.33.0",
     "webpack-cli": "^3.3.2"
+  },
+  "devDependencies": {
+    "morgan": "^1.9.1"
   }
 }
