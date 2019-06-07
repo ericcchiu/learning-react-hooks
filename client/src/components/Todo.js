@@ -25,7 +25,7 @@ const Todo = props => {
     return () => {
       console.log('Cleanup');
     };
-  }, [todoName]);
+  }, []);
   
   const mouseMoveHandler = event => {
     console.log(event.clientX, event.clientY);
@@ -33,7 +33,6 @@ const Todo = props => {
 
   useEffect(() => {
     document.addEventListener('mousemove', mouseMoveHandler);
-
     return () => {
       document.removeEventListener('mousemove', mouseMoveHandler );
     }

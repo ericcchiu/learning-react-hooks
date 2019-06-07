@@ -1,14 +1,27 @@
-import React, { Component } from 'react';
-import Todo from './components/Todo';
+import React, { useState } from "react";
+import Todo from "./components/Todo";
+import Header from "./components/Header";
+import Auth from "./components/Auth";
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Welcome to React Boiler Plate</h1>
-        <Todo />
-      </div>
-    )
+const App = () => {
+  const [page, setPage] = useState('Auth');
+
+  const switchPage = (pageName) => {
+    setPage(pageName);
   }
-}
-export default App; 
+
+
+  return (
+    <div>
+      <Header 
+        onLoadTodos={switchPage.bind(this, 'Todos')} 
+        onLoadAuth={switchPage.bind(this, 'Auth')}
+      />
+      <hr />
+      {page === 'Auth' ? <Auth />: <Todo />}
+      
+      
+    </div>
+  );
+};
+export default App;
