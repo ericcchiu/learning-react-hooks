@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios'
 import '@babel/polyfill';
 
@@ -6,27 +6,49 @@ const Todo = props => {
   const [todoName, setTodoName] = useState('');
   const [todoList, setTodoList] = useState([]);
 
-  // const [todoState, setTodoState] = useState({ userInput: "", todoList: [] });
+  useEffect(() => {
+    const asyncFetchTodos = async() => {
+      try {
+        const todoResponse = await axios.get('/todolist');
+        const todosData = await todoResponse.data;
+        const todos = [];
+
+        for(let key in todosData) {
+          todos.push({id: key, name: todosData[key].name});
+        }
+        setTodoList(todos);
+      } catch(error) {
+        console.log('Error retrieving todos', error);
+      }
+    };
+    asyncFetchTodos();
+    return () => {
+      console.log('Cleanup');
+    };
+  }, [todoName]);
+  
+  const mouseMoveHandler = event => {
+    console.log(event.clientX, event.clientY);
+  }
+
+  useEffect(() => {
+    document.addEventListener('mousemove', mouseMoveHandler);
+
+    return () => {
+      document.removeEventListener('mousemove', mouseMoveHandler );
+    }
+  });
+
 
   const inputChangeHandler = event => {
-    /* setTodoState({
-         userInput: event.target.value,
-         todoList: todoState.todoList
-       });
-    */
-
     setTodoName(event.target.value)
   };
 
   const todoAddHandler = () => {
-    // setTodoState({
-    //   userInput: todoState.userInput,
-    //   todoList: todoState.todoList.concat(todoState.userInput)
-    // });
     setTodoList(todoList.concat(todoName));
-    async function postToFirebase () {
+    const  postToFirebase = async() => {
       try {
-        await axios.post('/savetodo', {name: todoName});
+        await axios.post('/todo', {name: todoName});
       } catch (error) {
         console.log('Error saving todo to database', error);
       }
@@ -47,7 +69,7 @@ const Todo = props => {
       </button>
       <ul>
         {todoList.map((todo, index) => (
-          <li key={index}>{todo}</li>
+          <li key={index}>{todo.name}</li>
         ))}
       </ul>
     </Fragment>
