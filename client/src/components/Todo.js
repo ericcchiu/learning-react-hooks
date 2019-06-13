@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios'
-import '@babel/polyfill';
 
 const Todo = props => {
   const [todoName, setTodoName] = useState('');
