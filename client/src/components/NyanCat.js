@@ -32,6 +32,7 @@ let __nyan = [[
 ]]
 
 function nyan(){
+    // eslint-disable-next-line no-restricted-syntax
     console.clear();
     console.log(__nyan[_nyan].join("\n"))
     if(_nyan == 0){ _nyan = 1; } else { _nyan = 0; }
