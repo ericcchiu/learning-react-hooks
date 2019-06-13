@@ -49,6 +49,8 @@
     "webpack-cli": "^3.3.2"
   },
   "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
     "morgan": "^1.9.1"
   }
 }
