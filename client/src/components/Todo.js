@@ -18,7 +18,7 @@ const Todo = props => {
         }
         setTodoList(todos);
       } catch(error) {
-        console.log('Error retrieving todos', error);
+        console.error(error);
       }
     };
     asyncFetchTodos();
