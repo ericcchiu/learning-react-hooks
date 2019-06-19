@@ -26,31 +26,41 @@ const Todo = props => {
     };
   }, []);
 
-  const mouseMoveHandler = event => {
-    console.log(event.clientX, event.clientY);
-  };
+  // const mouseMoveHandler = event => {
+  //   console.log(event.clientX, event.clientY);
+  // };
 
-  useEffect(() => {
-    document.addEventListener("mousemove", mouseMoveHandler);
-    return () => {
-      document.removeEventListener("mousemove", mouseMoveHandler);
-    };
-  });
+  // useEffect(() => {
+  //   document.addEventListener("mousemove", mouseMoveHandler);
+  //   return () => {
+  //     document.removeEventListener("mousemove", mouseMoveHandler);
+  //   };
+  // });
 
   const inputChangeHandler = event => {
     setTodoName(event.target.value);
   };
 
   const todoAddHandler = () => {
-    setTodoList(todoList.concat(todoName));
-    const postToFirebase = async () => {
-      try {
-        await axios.post("/todo", { name: todoName });
-      } catch (error) {
-        console.log("Error saving todo to database", error);
-      }
-    };
-    postToFirebase();
+    axios.post('/todo', { name: todoName})
+    .then(res => {
+      // setTimeout(() => {
+        // const todoItem = { id: res.data.name, name: todoName }; 
+        // setTodoList(todoList.concat(todoItem));
+      // }, 1000);
+      const todoItem = { id: res.data.name, name: todoName }; 
+        setTodoList(todoList.concat(todoItem));
+    })
+
+    // setTodoList(todoList.concat(todoName));
+    // const postToFirebase = async (res) => {
+    //   try {
+    //     await axios.post("/todo", { name: todoName });
+    //   } catch (error) {
+    //     console.log("Error saving todo to database", error);
+    //   }
+    // };
+    // postToFirebase();
   };
 
   return (
