@@ -42,15 +42,14 @@ const Todo = props => {
   };
 
   const todoAddHandler = () => {
-    axios.post('/todo', { name: todoName})
-    .then(res => {
+    axios.post("/todo", { name: todoName }).then(res => {
       // setTimeout(() => {
-        // const todoItem = { id: res.data.name, name: todoName }; 
-        // setTodoList(todoList.concat(todoItem));
+      // const todoItem = { id: res.data.name, name: todoName };
+      // setTodoList(todoList.concat(todoItem));
       // }, 1000);
-      const todoItem = { id: res.data.name, name: todoName }; 
-        setTodoList(todoList.concat(todoItem));
-    })
+      const todoItem = { id: res.data.name, name: todoName };
+      setTodoList(todoList.concat(todoItem));
+    });
 
     // setTodoList(todoList.concat(todoName));
     // const postToFirebase = async (res) => {
