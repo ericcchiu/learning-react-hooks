@@ -1,10 +1,28 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useReducer } from "react";
 import axios from "axios";
 
 const Todo = props => {
   const [todoName, setTodoName] = useState("");
-  const [todoList, setTodoList] = useState([]);
+  const [submittedTodo, setSubmittedTodo] = useState(null);
+  // const [todoList, setTodoList] = useState([]);
 
+  // Function that removes and deletes a todo item
+  const todoListReducer = (state, action) => {
+    switch (action.type) {
+      case "ADD":
+        return state.concat(action.payload);
+      case 'SET': 
+        return action.payload; // expect to be an array of new items
+      case "REMOVE":
+        return state.filter(todo => todo.id !== action.payload);
+      default:
+        return state;
+    }
+  };
+
+  const [todoList, dispatch] = useReducer(todoListReducer, []);
+
+  // Hook that fetches a list of todos after the component mounts
   useEffect(() => {
     const asyncFetchTodos = async () => {
       try {
@@ -15,7 +33,8 @@ const Todo = props => {
         for (let key in todosData) {
           todos.push({ id: key, name: todosData[key].name });
         }
-        setTodoList(todos);
+        // setTodoList(todos);
+        dispatch({type: 'SET', payload: todos})
       } catch (error) {
         console.error(error);
       }
@@ -25,17 +44,12 @@ const Todo = props => {
       console.log("Cleanup");
     };
   }, []);
-
-  // const mouseMoveHandler = event => {
-  //   console.log(event.clientX, event.clientY);
-  // };
-
-  // useEffect(() => {
-  //   document.addEventListener("mousemove", mouseMoveHandler);
-  //   return () => {
-  //     document.removeEventListener("mousemove", mouseMoveHandler);
-  //   };
-  // });
+  // Hook that adds a new item to the state
+  useEffect(() => {
+    if (submittedTodo) {
+      dispatch({type: 'ADD', payload: submittedTodo});
+    }
+  }, [submittedTodo]);
 
   const inputChangeHandler = event => {
     setTodoName(event.target.value);
@@ -48,18 +62,14 @@ const Todo = props => {
       // setTodoList(todoList.concat(todoItem));
       // }, 1000);
       const todoItem = { id: res.data.name, name: todoName };
-      setTodoList(todoList.concat(todoItem));
+      setSubmittedTodo(todoItem);
+      // setTodoList(todoList.concat(todoItem));
     });
 
-    // setTodoList(todoList.concat(todoName));
-    // const postToFirebase = async (res) => {
-    //   try {
-    //     await axios.post("/todo", { name: todoName });
-    //   } catch (error) {
-    //     console.log("Error saving todo to database", error);
-    //   }
-    // };
-    // postToFirebase();
+  };
+
+  const todoRemoveHandler = todoId => {
+    dispatch({type: 'REMOVE', payload: todoId});
   };
 
   return (
@@ -74,8 +84,8 @@ const Todo = props => {
         Add
       </button>
       <ul>
-        {todoList.map((todo, index) => (
-          <li key={index}>{todo.name}</li>
+        {todoList.map((todo) => (
+          <li key={todo.id} onClick={todoRemoveHandler.bind(this, todo.id)}>{todo.name}</li>
         ))}
       </ul>
     </Fragment>
